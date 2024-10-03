@@ -5,7 +5,7 @@
 // Functions Index:
 void print_beginning();
 void print_word(char word[20], char guess_array[20]);
-void verify(int already_matched, char guess, char word[20], int matches, int tries);
+void verify(int already_matched, char guess, char word[20], int matches, int* tries);
 
 int main(){
 	int win = 0, hang = 0, tries = 0;
@@ -38,11 +38,7 @@ int main(){
 			}
 		}
 
-		verify(already_matched, guess, word, matches, tries);
-
-		if(already_matched != 1){
-			tries++;
-		}
+		verify(already_matched, guess, word, matches, &tries);
 
 		printf("%d of %d tries\n\n", tries, (int)strlen(word));
 
@@ -89,7 +85,7 @@ void print_word(char word[20], char guess_array[20]){
 }
 
 // Verify if the typed letter is correct or was already typed before
-void verify(int already_matched, char guess, char word[20], int matches, int tries){
+void verify(int already_matched, char guess, char word[20], int matches, int* tries){
 	if(already_matched == 0){
 		// Verify if the guessed letter was correct
 		for(int i = 0; i < strlen(word); i++){
@@ -105,4 +101,8 @@ void verify(int already_matched, char guess, char word[20], int matches, int tri
 			printf("There's no match\n");
 		}
 	}
+
+	if(already_matched != 1){
+			(*tries)++;
+		}
 }
