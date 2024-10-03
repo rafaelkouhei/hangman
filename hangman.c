@@ -5,14 +5,13 @@
 // Functions Index:
 void print_beginning();
 void print_word(char word[20], char guess_array[20]);
-void verify(int already_matched, char guess, char word[20], int matches, int* tries);
+void verify(int already_matched, char guess, char word[20], int matches, int* attempts);
 
 int main(){
-	int win = 0, hang = 0, tries = 0;
+	int win = 0, hang = 0, attempts = 0;
 	char word[20] = {};
 	char guess_array[20] = {};
-	// sprintf(word, "RAFAEL\0");
-	sprintf(word, "RAFAEL");
+	sprintf(word, "NABUCODONOSOR");
 
 	print_beginning();
 
@@ -38,11 +37,13 @@ int main(){
 			}
 		}
 
-		verify(already_matched, guess, word, matches, &tries);
+		verify(already_matched, guess, word, matches, &attempts);
 
-		printf("%d of %d tries\n\n", tries, (int)strlen(word));
+		printf(" _______________________\n");
+		printf("| %d attempts remaining |\n", (int)strlen(word) - attempts);
+		printf(" -----------------------\n\n");
 
-		if(tries >= strlen(word)){
+		if(attempts >= strlen(word)){
 			hang = 1;
 			printf("--------------------------------------------------------------------\nGAME OVER!\n--------------------------------------------------------------------\n");
 		}
@@ -85,24 +86,24 @@ void print_word(char word[20], char guess_array[20]){
 }
 
 // Verify if the typed letter is correct or was already typed before
-void verify(int already_matched, char guess, char word[20], int matches, int* tries){
+void verify(int already_matched, char guess, char word[20], int matches, int* attempts){
 	if(already_matched == 0){
 		// Verify if the guessed letter was correct
 		for(int i = 0; i < strlen(word); i++){
 			if(guess == word[i]){
-				printf("\nThe position %d has this letter\n", i+1);
+				printf("\nThe position %d has this letter\n\n", i+1);
 				matches++;
 			}
 		}
 
 		if(matches > 0){
-			printf("There's %d match(es) for this letter\n", matches);
+			printf("There's %d match(es) for this letter\n\n", matches);
 		} else {
-			printf("There's no match\n");
+			printf("\nThere's no match\n\n");
 		}
 	}
 
-	if(already_matched != 1){
-			(*tries)++;
+	if(already_matched != 1 && matches == 0){
+			(*attempts)++;
 		}
 }
