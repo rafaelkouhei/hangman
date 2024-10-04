@@ -77,7 +77,7 @@ void print_beginning(char word[20]){
 	printf("Welcome to the Hangman Game!\n");
 	printf("--------------------------------------------------------------------\n");
 	printf(" _______________________\n");
-	printf("|  You have %d attempts  |\n", 4);
+	printf("|  You have 4 attempts  |\n");
 	printf(" -----------------------\n\n");
 }
 
