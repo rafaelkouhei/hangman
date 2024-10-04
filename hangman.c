@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // Functions Index:
+void choose_word(char word[20]);
 void print_beginning(char word[20]);
 void print_word(char word[20], char guess_array[20]);
 void verify_typed(char guess, char guess_array[20], int* already_matched);
@@ -12,8 +14,8 @@ int main(){
 	int win = 0, hang = 0, attempts = 0;
 	char word[20] = {};
 	char guess_array[20] = {};
-	sprintf(word, "NABUCODONOSOR");
 
+	choose_word(word);
 	print_beginning(word);
 
 	while(!win && !hang){
@@ -43,6 +45,23 @@ int main(){
 }
 
 /*------------------- Functions building -------------------*/
+
+// Choose the word
+void choose_word(char word[20]){
+	srand(time(NULL));
+	int r = rand();
+	printf("%d\n", r);
+
+	if(r%5 == 0){
+		sprintf(word, "MORPHEUS");
+	} else if(r%3 == 0){
+		sprintf(word, "TRINITY");
+	} else if(r%2 == 0){
+		sprintf(word, "ANDERSON");
+	} else {
+		sprintf(word, "NABUCODONOSOR");
+	}
+}
 
 // Clear the command line and print game's beginning message
 void print_beginning(char word[20]){
@@ -106,7 +125,7 @@ void verify_correct(int already_matched, char guess, char word[20], int matches,
 		if(matches > 0){
 			printf("\nThere's %d match(es) for this letter\n\n", matches);
 		} else {
-			printf("\nThere's no match\n\n");
+			printf("\n!!!There's no match!!!\n\n");
 		}
 	}
 
