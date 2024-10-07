@@ -45,19 +45,30 @@ int main(){
 
 // Choose the word
 void choose_word(char word[20]){
-	srand(time(NULL));
-	int r = rand();
-	printf("%d\n", r);
+	FILE* f;
+	f = fopen("matrix.txt", "r");
 
-	if(r%5 == 0){
-		sprintf(word, "MORPHEUS");
-	} else if(r%3 == 0){
-		sprintf(word, "TRINITY");
-	} else if(r%2 == 0){
-		sprintf(word, "ANDERSON");
-	} else {
-		sprintf(word, "NABUCODONOSOR");
+	// In case if file is not found
+	if(f == 0){
+		printf("Database not found\n");
+		exit(1);
 	}
+
+	// See how many words is in the file
+	int word_qty = 0;
+	fscanf(f, "%d", &word_qty);
+
+	// Set a random number
+	srand(time(0));
+	int r = rand() % word_qty;
+
+	// Select random word
+	for(int i = 0; i < r; i++){
+		fscanf(f, "%s", word);
+	}
+
+	fclose(f);
+
 }
 
 // Clear the command line and print game's beginning message
