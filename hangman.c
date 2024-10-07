@@ -11,7 +11,7 @@ int main(){
 	char guess_array[20] = {};
 
 	choose_word(word);
-	print_beginning(word);
+	print_beginning();
 
 	while(!win && !hang){
 		char guess = {};
@@ -60,19 +60,24 @@ void choose_word(char word[20]){
 
 	// Set a random number
 	srand(time(0));
-	int r = rand() % word_qty;
+	int r = rand()%word_qty;
 
 	// Select random word
-	for(int i = 0; i < r; i++){
+	for(int i = 0; i <= rand()%word_qty; i++){
 		fscanf(f, "%s", word);
 	}
 
-	fclose(f);
+	// printf("%d\n", rand());
+	// printf("%d\n", word_qty);
+	// printf("%d\n", r);
+	// printf("%d\n", rand()%word_qty);
 
+	fclose(f);
+	// exit(1);
 }
 
 // Clear the command line and print game's beginning message
-void print_beginning(char word[20]){
+void print_beginning(){
 	int system(const char *command);
 	system("clear");
 
