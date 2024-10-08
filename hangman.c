@@ -38,6 +38,9 @@ int main(){
 			win_game(&win);
 		}
 	}
+
+	add_word();
+
 	return 0;
 }
 
@@ -67,13 +70,7 @@ void choose_word(char word[20]){
 		fscanf(f, "%s", word);
 	}
 
-	// printf("%d\n", rand());
-	// printf("%d\n", word_qty);
-	// printf("%d\n", r);
-	// printf("%d\n", rand()%word_qty);
-
 	fclose(f);
-	// exit(1);
 }
 
 // Clear the command line and print game's beginning message
@@ -211,4 +208,45 @@ void win_game(int* win){
 	printf("			⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠓⠒⠒⠒⠒⠒⠒⠒⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
 	printf("			⠀⢀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀⢀⣀⣀⣀⣀⣀⣀⣀⣀\n");
 	printf("			⣿⣯⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\n\n");
+}
+
+// Adding new words to the text file
+void add_word(){
+	char choice;
+	printf("Do you want to add a new word? (Y/N)\n");
+	scanf(" %c", &choice);
+	choice = toupper(choice);
+
+	if(choice == 'Y'){
+		char new_word[20];
+		int qty = 0;
+
+		printf("Insert the new word:\n");
+		scanf("%s", new_word);
+
+		for(int i = 0; i < strlen(new_word); i++){
+			new_word[i] = toupper(new_word[i]);
+		}
+
+		FILE *f;
+		// 'r' is for reading, and '+' for writing
+		f = fopen("matrix.txt", "r+");
+		if(f == 0){
+			printf("Database not found\n");
+			exit(1);
+		}
+
+		fscanf(f, "%d", &qty);
+		qty++;
+
+		fseek(f, 0, SEEK_SET);
+		fprintf(f, "%d", qty);
+
+		fseek(f, 0, SEEK_END);
+		fprintf(f, "\n%s", new_word);
+
+		fclose(f);
+	} else if(choice == 'N'){
+		exit(1);
+	}
 }
