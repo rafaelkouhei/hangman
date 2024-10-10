@@ -6,12 +6,13 @@
 #include "hangman.h"
 
 int main(){
-	int win = 0, hang = 0, attempts = 0, correct = 0;
-	char word[20] = {};
-	char guess_array[20] = {};
+	int win = 0, hang = 0, attempts = 0, correct = 0, wrong = 0;
+	char word[word_len] = {};
+	char guess_array[word_len] = {};
 
 	choose_word(word);
 	print_beginning();
+	print_hangedman(wrong);
 
 	while(!win && !hang){
 		char guess = {};
@@ -25,7 +26,9 @@ int main(){
 		guess = toupper(guess);
 
 		verify_typed(guess, guess_array, &already_matched);
-		verify_correct(already_matched, guess, word, matches, &attempts, &correct);
+		verify_correct(already_matched, guess, word, matches, &attempts, &correct, &wrong);
+
+		print_hangedman(wrong);
 
 		printf(" _______________________\n");
 		printf("|  %d attempts remaining |\n", 4 - attempts);
@@ -47,7 +50,7 @@ int main(){
 /*------------------- Functions building -------------------*/
 
 // Choose the word
-void choose_word(char word[20]){
+void choose_word(char word[word_len]){
 	FILE* f;
 	f = fopen("matrix.txt", "r");
 
@@ -75,7 +78,7 @@ void choose_word(char word[20]){
 
 // Clear the command line and print game's beginning message
 void print_beginning(){
-	int system(const char *command);
+	int system(const char * command);
 	system("clear");
 
 	printf("--------------------------------------------------------------------\n");
@@ -86,8 +89,21 @@ void print_beginning(){
 	printf(" -----------------------\n\n");
 }
 
+// Print hangedman counting wrong answers
+void print_hangedman(int wrong){
+    printf("  _______      \n");
+    printf(" |/      |     \n");
+    printf(" |      %s    \n", (wrong >= 1 ? "(_)" : " "));
+    printf(" |      %c%c%c   \n", (wrong >= 3 ? '/' : ' '), (wrong >= 2 ? '|' : ' '), (wrong >= 3 ? '\\' : ' '));
+    printf(" |       %c     \n", (wrong >= 2 ? '|' : ' '));
+    printf(" |      %c %c   \n", (wrong >= 4 ? '/' : ' '), (wrong >= 4 ? '\\' : ' '));
+    printf(" |             \n");
+    printf("_|___          \n");
+    printf("\n");
+}
+
 // Print the dashes and the letters already typed
-void print_word(char word[20], char guess_array[20]){
+void print_word(char word[word_len], char guess_array[word_len]){
 	for(int i = 0; i < strlen(word); i++){
 		int match = 0;
 		for(int j = 0; j < strlen(guess_array); j++){
@@ -108,8 +124,8 @@ void print_word(char word[20], char guess_array[20]){
 }
 
 // Verify if the guessed letter was already typed
-void verify_typed(char guess, char guess_array[20], int* already_matched){
-	for(int i = 0; i < 20; i++){
+void verify_typed(char guess, char guess_array[word_len], int* already_matched){
+	for(int i = 0; i < word_len; i++){
 		if(guess == guess_array[i]){
 			printf("\nYou already tried this letter\n");
 			(*already_matched) = 1;
@@ -122,7 +138,7 @@ void verify_typed(char guess, char guess_array[20], int* already_matched){
 }
 
 // Verify if the typed letter is correct
-void verify_correct(int already_matched, char guess, char word[20], int matches, int* attempts, int* correct){
+void verify_correct(int already_matched, char guess, char word[word_len], int matches, int * attempts, int * correct, int * wrong){
 	if(already_matched == 0){
 		// Verify if the guessed letter was correct
 		for(int i = 0; i < strlen(word); i++){
@@ -137,6 +153,7 @@ void verify_correct(int already_matched, char guess, char word[20], int matches,
 			printf("\nThere's %d match(es) for this letter\n\n", matches);
 		} else {
 			printf("\n!!!There's no match!!!\n\n");
+			(*wrong)++;
 		}
 	}
 
@@ -146,7 +163,7 @@ void verify_correct(int already_matched, char guess, char word[20], int matches,
 }
 
 // Lose the game
-void lose_game(int* hang){
+void lose_game(int * hang){
 	(*hang) = 1;
 	printf("\n /$$     /$$ /$$$$$$  /$$   /$$       /$$        /$$$$$$   /$$$$$$  /$$$$$$$$       /$$\n");
 	printf("|  $$   /$$//$$__  $$| $$  | $$      | $$       /$$__  $$ /$$__  $$|__  $$__/      | $$\n");
@@ -182,7 +199,7 @@ void lose_game(int* hang){
 }
 
 // Win the game
-void win_game(int* win){
+void win_game(int * win){
 	(*win) = 1;
 	printf(" /$$     /$$ /$$$$$$  /$$   /$$       /$$      /$$  /$$$$$$  /$$   /$$       /$$\n");
 	printf("|  $$   /$$//$$__  $$| $$  | $$      | $$  /$ | $$ /$$__  $$| $$$ | $$      | $$\n");
@@ -218,7 +235,7 @@ void add_word(){
 	choice = toupper(choice);
 
 	if(choice == 'Y'){
-		char new_word[20];
+		char new_word[word_len];
 		int qty = 0;
 
 		printf("Insert the new word:\n");

@@ -31,6 +31,12 @@ int main(){
 }
 
 void print_pointer(int var, int* pointer){
+	printf("---------- Function printing ----------\n");
 	printf("%d\n", var);
 	printf("%d\n", pointer);
+	printf("---------------------------------------\n");
+
+	int y = 0;
+	y = *pointer;
+	printf("Y: %d\n", y);
 }
